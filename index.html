@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Police vs AI</title>
+<meta name="description" content="Police vs AI - a Roblox police chase game. Hunt the suspects before they escape.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Chakra+Petch:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07060f; --panel:#100e1f; --line:#2a2650;
+  --red:#ff2a4d; --blue:#2d8cff; --text:#e9ecff; --dim:#9a9cc4;
+  --display:'Bungee','Impact',sans-serif;
+  --body:'Chakra Petch','Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.6;overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:96px 24px 160px;overflow:hidden}
+.hero::before,.hero::after{content:"";position:absolute;top:-20%;width:60vw;height:80%;filter:blur(90px);opacity:.0;animation:strobe 1.2s steps(1) infinite}
+.hero::before{left:-15vw;background:var(--red)}
+.hero::after{right:-15vw;background:var(--blue);animation-delay:.6s}
+@keyframes strobe{0%{opacity:.55}15%{opacity:.1}30%{opacity:.5}45%{opacity:0}100%{opacity:0}}
+.hero > *{position:relative;z-index:1}
+h1{font-family:var(--display);font-size:clamp(3rem,12vw,9rem);line-height:.95;letter-spacing:.01em}
+h1 .p{color:#fff;text-shadow:0 0 12px var(--red),0 0 40px var(--red);animation:glowR 1.2s steps(1) infinite}
+h1 .v{display:block;font-size:.32em;color:var(--dim);margin:.25em 0}
+h1 .a{color:#fff;text-shadow:0 0 12px var(--blue),0 0 40px var(--blue);animation:glowB 1.2s steps(1) infinite}
+@keyframes glowR{0%{opacity:1}50%{opacity:.55}}
+@keyframes glowB{0%{opacity:.55}50%{opacity:1}}
+.tag{max-width:34rem;margin:28px auto 36px;font-size:1.2rem;color:var(--dim)}
+.btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.btn{display:inline-block;padding:16px 36px;font-family:var(--display);font-size:1.1rem;text-decoration:none;border:2px solid var(--red);color:#fff;background:var(--red);box-shadow:0 0 24px rgba(255,42,77,.6);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-3px);box-shadow:0 0 44px rgba(255,42,77,.9)}
+.btn.alt{background:transparent;border-color:var(--blue);box-shadow:0 0 18px rgba(45,140,255,.4)}
+.btn.alt:hover{box-shadow:0 0 38px rgba(45,140,255,.8)}
+
+/* road */
+.road{position:absolute;left:0;right:0;bottom:0;height:130px;background:#0b0a18;border-top:2px solid var(--line);overflow:hidden}
+.road::before{content:"";position:absolute;left:0;top:50%;width:200%;height:6px;transform:translateY(-50%);background:repeating-linear-gradient(90deg,#fff 0 60px,transparent 60px 140px);opacity:.5;animation:lane 1s linear infinite}
+@keyframes lane{to{transform:translate(-140px,-50%)}}
+.car{position:absolute;top:50%;height:22px;width:64px;margin-top:-30px;border-radius:6px;background:#1a1833}
+.car::before,.car::after{content:"";position:absolute;top:-4px;width:20px;height:6px;border-radius:3px}
+.car.cop{left:14%;animation:chase 6s ease-in-out infinite}
+.car.cop::before{left:10px;background:var(--red);box-shadow:0 0 14px var(--red)}
+.car.cop::after{right:10px;background:var(--blue);box-shadow:0 0 14px var(--blue)}
+.car.sus{left:calc(14% + 150px);border:1px solid var(--dim);animation:chase 6s ease-in-out infinite reverse}
+@keyframes chase{50%{transform:translateX(40px)}}
+
+/* SECTIONS */
+section{padding:88px 24px}
+.wrap{max-width:1040px;margin:0 auto}
+h2{font-family:var(--display);font-size:clamp(1.8rem,5vw,3rem);margin-bottom:12px}
+.lead{color:var(--dim);max-width:36rem;margin-bottom:40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--red);padding:24px}
+.card:nth-child(even){border-left-color:var(--blue)}
+.card h3{font-size:1.2rem;margin-bottom:6px}
+.card p{color:var(--dim)}
+
+/* screenshots */
+.shot{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1236,#0c1530);border:1px solid var(--line);color:var(--dim);font-size:.95rem;text-align:center;padding:12px;overflow:hidden}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* log */
+.log{list-style:none;border-left:2px solid var(--line);padding-left:24px}
+.log li{margin-bottom:28px;position:relative}
+.log li::before{content:"";position:absolute;left:-31px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--blue);box-shadow:0 0 12px var(--blue)}
+.log li:first-child::before{background:var(--red);box-shadow:0 0 12px var(--red)}
+.log b{font-size:1.1rem}
+.log time{display:block;color:var(--dim);font-size:.9rem}
+
+footer{padding:48px 24px;text-align:center;color:var(--dim);border-top:1px solid var(--line);font-size:.9rem}
+footer a{color:var(--text)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .hero::before{opacity:.3}.hero::after{opacity:.3}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1><span class="p">Police</span><span class="v">vs</span><span class="a">AI</span></h1>
+  <p class="tag">Hit the sirens, floor it, and take down the suspects before they reach the border.</p>
+  <div class="btns">
+    <!-- TODO: replace with your Roblox game link -->
+    <a class="btn" href="https://www.roblox.com/games/89502277287553/Police-vs-AI" target="_blank" rel="noopener">Play now</a>
+    <!-- TODO: replace with your Discord invite -->
+    <a class="btn alt" href="https://discord.gg/wKthHDuytR" target="_blank" rel="noopener">Join Discord</a>
+  </div>
+  <div class="road" aria-hidden="true"><div class="car cop"></div><div class="car sus"></div></div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <h2>How it plays</h2>
+    <p class="lead">Edit these cards to match your game's real features.</p>
+    <div class="grid">
+      <div class="card"><h3>High-speed chases</h3><p>Race through the city and pin down suspects before they escape.</p></div>
+      <div class="card"><h3>AI suspects</h3><p>Every suspect drives and flees on its own, so no two chases play out the same.</p></div>
+      <div class="card"><h3>Upgrade your cruiser</h3><p>Earn rewards for every arrest and unlock faster, tougher vehicles.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="screens">
+  <div class="wrap">
+    <h2>Screenshots</h2>
+    <p class="lead">Swap each box for a real screenshot: put the image in the same folder and use &lt;img src="shot1.png" alt="..."&gt;.</p>
+    <div class="grid">
+      <div class="shot">Screenshot 1</div>
+      <div class="shot">Screenshot 2</div>
+      <div class="shot">Screenshot 3</div>
+    </div>
+  </div>
+</section>
+
+<section id="updates">
+  <div class="wrap">
+    <h2>Update log</h2>
+    <p class="lead">Newest update first.</p>
+    <ul class="log">
+      <li><b>v0.2 - Example update</b><time>2026-10-01</time>New vehicle, smarter AI pathfinding, bug fixes.</li>
+      <li><b>v0.1 - Launch</b><time>2026-09-01</time>First public release.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <p>Police vs AI is made by <strong>AMILGFGT</strong>. Not affiliated with Roblox Corporation.</p>
+  <p><a href="https://discord.gg/wKthHDuytR">Discord</a> &middot; <a href="https://www.youtube.com/@HaPi_DoDoKa_30">YouTube</a></p>
+</footer>
+
+</body>
+</html>
